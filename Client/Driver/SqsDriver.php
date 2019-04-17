@@ -56,7 +56,13 @@ class SqsDriver extends GenericDriver
     protected function createTransportQueueName(string $name, bool $prefix): string
     {
         $name = parent::createTransportQueueName($name, $prefix);
-
+        
+        if ('.fifo' === \substr($name, -5, 5)) {
+            $tempName = \substr($name, 0, \strlen($name) - 5);
+            
+            return str_replace('.', '_dot_', $tempName) . '.fifo';
+        }
+        
         return str_replace('.', '_dot_', $name);
     }
 }
